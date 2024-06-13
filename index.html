@@ -10,7 +10,7 @@
       background-color: #f8f8f8; /* Off-white background */
     }
     .container {
-      max-width: 600px;
+      max-width: 100%; /* Allow container to take full width on smaller screens */
       margin: 0 auto;
       padding: 20px;
       background: rgba(255, 255, 255, 0.8); /* Slightly transparent white to ensure readability */
@@ -22,7 +22,7 @@
       top: 10px; /* Adjusted to start below the header */
       left: 50%;
       transform: translateX(-50%);
-      width: 12in; /* Set the width to 12 inches */
+      width: 100%; /* Take full width of container */
       z-index: -1; /* Place it behind other content */
       opacity: 0.1; /* Slightly transparent to avoid distraction */
     }
@@ -72,11 +72,21 @@
       font-weight: bold;
     }
     .button-container {
-      width: 5in; /* Set width to 5 inches */
+      width: 100%; /* Take full width of container */
+      max-width: 400px; /* Limit maximum width for larger screens */
       margin: 20px auto; /* Center the button container */
       display: flex;
       justify-content: space-around;
       gap: 10px; /* Add gap between buttons */
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      .button-container {
+        flex-direction: column;
+      }
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
@@ -103,7 +113,7 @@
       <input type="text" id="name" placeholder="Name" required name="name">
       <input type="text" id="id" placeholder="ID" required name="id">
       <input type="text" id="phone" placeholder="Phone Number" required name="phone">
-      <input type="number" id="hours" placeholder="Hours" name="hours">
+      <input type="number" id="hours" placeholder="Hours" required name="hours">
       <input type="text" id="cycleCode" placeholder="Cycle Code" required name="cycle_code">
       <textarea id="note" placeholder="Note" class="note" style="display: none;" name="note"></textarea>
       <input type="hidden" name="form_type" id="form_type">
@@ -166,3 +176,7 @@
   </script>
 </body>
 </html>
+
+    
+
+
