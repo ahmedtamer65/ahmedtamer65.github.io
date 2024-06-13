@@ -5,7 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bike Yard App</title>
   <style>
-    /* Your CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8; /* Off-white background */
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8); /* Slightly transparent white to ensure readability */
+      border-radius: 10px;
+      position: relative; /* Make container relative for absolute positioning */
+    }
+    .background-image {
+      position: absolute;
+      top: 10px; /* Adjusted to start below the header */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12in; /* Set the width to 12 inches */
+      z-index: -1; /* Place it behind other content */
+      opacity: 0.1; /* Slightly transparent to avoid distraction */
+    }
+    input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    #bookBtn {
+      background-color: #007bff;
+    }
+    #repairBtn {
+      background-color: #dc3545;
+    }
+    #submitBtn {
+      background-color: #000;
+    }
+    #exportBtn {
+      background-color: #28a745;
+    }
+    .dashboard {
+      background-color: yellow;
+      padding: 10px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 2px solid red;
+    }
+    .dashboard img {
+      height: 40px;
+    }
+    .note {
+      background-color: #ffc107;
+    }
+    #errorMessage {
+      color: red;
+      font-weight: bold;
+    }
+    .button-container {
+      width: 5in; /* Set width to 5 inches */
+      margin: 20px auto; /* Center the button container */
+      display: flex;
+      justify-content: space-around;
+      gap: 10px; /* Add gap between buttons */
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 </head>
@@ -17,8 +89,10 @@
     </div>
   </header>
   <div class="container">
+    <!-- Background image -->
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLLU40gx6sGv6dKhbyc4AOVtlDFVVetXmpyg&s" alt="Background" class="background-image">
     
+    <!-- Button container -->
     <div class="button-container">
       <button id="bookBtn" onclick="showBookForm()">Book</button>
       <button id="repairBtn" onclick="showRepairForm()">Repair</button>
