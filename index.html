@@ -58,7 +58,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px; /* Add gap between elements */
+      gap: 10px;
       border: 2px solid red;
     }
     .dashboard img {
@@ -101,9 +101,9 @@
 
     <form id="bikeForm" style="display: none;" action="connect.php" method="post" enctype="multipart/form-data">
       <input type="text" id="name" placeholder="Name" required name="name">
-      <input type="text" id="id" placeholder="ID" required name="id">
-      <input type="text" id="phone" placeholder="Phone Number" required name="phone">
-      <input type="number" id="hours" placeholder="Hours" name="hours">
+      <input type="text" id="id" placeholder="ID" name="id">
+      <input type="text" id="phone" placeholder="Phone Number" name="phone">
+      <input type="number" id="hours" placeholder="hours" name="hours">
       <input type="text" id="cycleCode" placeholder="Cycle Code" required name="cycle_code">
       <textarea id="note" placeholder="Note" class="note" style="display: none;" name="note"></textarea>
       <input type="hidden" name="form_type" id="form_type">
@@ -135,4 +135,34 @@
       currentType = 'Repair';
       document.getElementById('form_type').value = 'repair';
       document.getElementById('bikeForm').style.display = 'block';
-      document.getElementById('name').style.display
+      document.getElementById('name').style.display = 'block';
+      document.getElementById('id').style.display = 'none';
+      document.getElementById('phone').style.display = 'none';
+      document.getElementById('hours').style.display = 'none';
+      document.getElementById('cycleCode').style.display = 'block';
+      document.getElementById('note').style.display = 'block';
+      document.getElementById('note').placeholder = 'Problem';
+      document.getElementById('name').focus();
+      document.getElementById('errorMessage').innerHTML = '';
+    }
+
+    function exportData() {
+      const wb = XLSX.utils.book_new();
+
+      const bookData = submittedData.filter(data => data.type === 'Book');
+      const repairData = submittedData.filter(data => data.type === 'Repair');
+
+      const wsBookData = bookData.map(data => [data.name, data.id, data.phone, data.hours, data.cycleCode, data.note]);
+      const wsRepairData = repairData.map(data => [data.name, data.cycleCode, data.note]);
+
+      const wsBook = XLSX.utils.aoa_to_sheet([['Name', 'ID', 'Phone Number', 'Hours', 'Cycle Code', 'Note'], ...wsBookData]);
+      const wsRepair = XLSX.utils.aoa_to_sheet([['Name', 'Cycle Code', 'Problem'], ...wsRepairData]);
+
+      XLSX.utils.book_append_sheet(wb, wsBook, 'Bookings');
+      XLSX.utils.book_append_sheet(wb, wsRepair, 'Repairs');
+
+      XLSX.writeFile(wb, 'bike_yard_data.xlsx');
+    }
+  </script>
+</body>
+</html>
