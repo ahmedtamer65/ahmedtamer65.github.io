@@ -5,7 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bike Yard App</title>
   <style>
-    /* Your CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8; /* Off-white background */
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8); /* Slightly transparent white to ensure readability */
+      border-radius: 10px;
+      position: relative; /* Make container relative for absolute positioning */
+    }
+    .background-image {
+      position: absolute;
+      top: 10px; /* Adjusted to start below the header */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12in; /* Set the width to 12 inches */
+      z-index: -1; /* Place it behind other content */
+      opacity: 0.1; /* Slightly transparent to avoid distraction */
+    }
+    input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    #bookBtn {
+      background-color: #007bff;
+    }
+    #repairBtn {
+      background-color: #dc3545;
+    }
+    #submitBtn {
+      background-color: #000;
+    }
+    #exportBtn {
+      background-color: #28a745;
+    }
+    .dashboard {
+      background-color: yellow;
+      padding: 10px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 2px solid red;
+    }
+    .dashboard img {
+      height: 40px;
+    }
+    .note {
+      background-color: #ffc107;
+    }
+    #errorMessage {
+      color: red;
+      font-weight: bold;
+    }
+    .button-container {
+      width: 5in; /* Set width to 5 inches */
+      margin: 20px auto; /* Center the button container */
+      display: flex;
+      justify-content: space-around;
+      gap: 10px; /* Add gap between buttons */
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 </head>
@@ -27,7 +99,7 @@
       <button id="exportBtn" onclick="exportData()">Export Data</button>
     </div>
 
-    <form id="bikeForm" style="display: none;" method="post" enctype="multipart/form-data">
+    <form id="bikeForm" style="display: none;" action="http://bikeyard1.000.pe.coonect.php" method="post" enctype="multipart/form-data">
       <input type="text" id="name" placeholder="Name" required name="name">
       <input type="text" id="id" placeholder="ID" required name="id">
       <input type="text" id="phone" placeholder="Phone Number" required name="phone">
@@ -36,7 +108,7 @@
       <textarea id="note" placeholder="Note" class="note" style="display: none;" name="note"></textarea>
       <input type="hidden" name="form_type" id="form_type">
       <div id="errorMessage"></div>
-      <button type="button" id="submitBtn" onclick="submitForm()">Submit</button>
+      <button type="submit" id="submitBtn">Submit</button>
     </form>
   </div>
 
@@ -90,27 +162,6 @@
       XLSX.utils.book_append_sheet(wb, wsRepair, 'Repairs');
 
       XLSX.writeFile(wb, 'bike_yard_data.xlsx');
-    }
-
-    function submitForm() {
-      const formData = new FormData(document.getElementById('bikeForm'));
-      fetch('http://bikeyard1.000.pe/connect.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.text();
-      })
-      .then(data => {
-        console.log('Response from server:', data);
-        // If needed, you can handle the response here
-      })
-      .catch(error => {
-        console.error('Error during fetch operation:', error);
-      });
     }
   </script>
 </body>
