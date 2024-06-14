@@ -27,7 +27,7 @@
       <button id="exportBtn" onclick="exportData()">Export Data</button>
     </div>
 
-    <form id="bikeForm" action="connect.php" method="post" enctype="multipart/form-data">
+    <form id="bikeForm" style="display: none;" method="post" enctype="multipart/form-data">
       <input type="text" id="name" placeholder="Name" required name="name">
       <input type="text" id="id" placeholder="ID" required name="id">
       <input type="text" id="phone" placeholder="Phone Number" required name="phone">
@@ -94,7 +94,7 @@
 
     function submitForm() {
       const formData = new FormData(document.getElementById('bikeForm'));
-      fetch('https://bikeyard1.000.pe/connect.php', {
+      fetch('http://bikeyard1.000.pe/connect.php', {
         method: 'POST',
         body: formData
       })
