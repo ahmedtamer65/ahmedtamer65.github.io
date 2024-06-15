@@ -113,11 +113,7 @@
   </div>
 
   <script>
-    let submittedData = [];
-    let currentType = '';
-
     function showBookForm() {
-      currentType = 'Book';
       document.getElementById('form_type').value = 'book';
       document.getElementById('bikeForm').style.display = 'block';
       document.getElementById('name').style.display = 'block';
@@ -132,7 +128,6 @@
     }
 
     function showRepairForm() {
-      currentType = 'Repair';
       document.getElementById('form_type').value = 'repair';
       document.getElementById('bikeForm').style.display = 'block';
       document.getElementById('name').style.display = 'block';
@@ -149,11 +144,11 @@
     function exportData() {
       const wb = XLSX.utils.book_new();
 
-      const bookData = submittedData.filter(data => data.type === 'Book');
-      const repairData = submittedData.filter(data => data.type === 'Repair');
+      const bookData = submittedData.filter(data => data.type === 'book');
+      const repairData = submittedData.filter(data => data.type === 'repair');
 
-      const wsBookData = bookData.map(data => [data.name, data.id, data.phone, data.hours, data.cycleCode, data.note]);
-      const wsRepairData = repairData.map(data => [data.name, data.cycleCode, data.note]);
+      const wsBookData = bookData.map(data => [data.name, data.id, data.phone, data.hours, data.cycle_code, data.note]);
+      const wsRepairData = repairData.map(data => [data.name, data.cycle_code, data.note]);
 
       const wsBook = XLSX.utils.aoa_to_sheet([['Name', 'ID', 'Phone Number', 'Hours', 'Cycle Code', 'Note'], ...wsBookData]);
       const wsRepair = XLSX.utils.aoa_to_sheet([['Name', 'Cycle Code', 'Problem'], ...wsRepairData]);
