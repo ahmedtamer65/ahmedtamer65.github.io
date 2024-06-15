@@ -8,12 +8,14 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f8f8f8; /* Off-white background */
+      margin: 0; /* Reset default margin */
+      padding: 0; /* Reset default padding */
     }
     .container {
       max-width: 600px;
-      margin: 0 auto;
+      margin: 20px auto;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.8); /* Slightly transparent white to ensure readability */
+      background: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
       border-radius: 10px;
       position: relative; /* Make container relative for absolute positioning */
     }
@@ -22,12 +24,12 @@
       top: 10px; /* Adjusted to start below the header */
       left: 50%;
       transform: translateX(-50%);
-      width: 12in; /* Set the width to 12 inches */
+      width: 100%; /* Ensure background image covers the container */
       z-index: -1; /* Place it behind other content */
       opacity: 0.1; /* Slightly transparent to avoid distraction */
     }
     input[type="text"], input[type="number"], textarea {
-      width: 100%;
+      width: calc(100% - 20px); /* Adjust for padding */
       padding: 10px;
       margin: 5px 0;
       box-sizing: border-box;
@@ -38,15 +40,13 @@
       border: none;
       cursor: pointer;
       width: 100%;
+      margin-top: 10px; /* Add space between buttons */
     }
     #bookBtn {
       background-color: #007bff;
     }
     #repairBtn {
       background-color: #dc3545;
-    }
-    #submitBtn {
-      background-color: #000;
     }
     #exportBtn {
       background-color: #28a745;
@@ -60,6 +60,7 @@
       justify-content: center;
       gap: 10px;
       border: 2px solid red;
+      margin-bottom: 20px; /* Add space below header */
     }
     .dashboard img {
       height: 40px;
@@ -70,13 +71,12 @@
     #errorMessage {
       color: red;
       font-weight: bold;
+      margin-top: 10px; /* Add space above error message */
     }
     .button-container {
-      width: 5in; /* Set width to 5 inches */
-      margin: 20px auto; /* Center the button container */
       display: flex;
       justify-content: space-around;
-      gap: 10px; /* Add gap between buttons */
+      margin-bottom: 20px; /* Add space below button container */
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
@@ -120,12 +120,9 @@
       currentType = 'book';
       document.getElementById('form_type').value = 'book';
       document.getElementById('bikeForm').style.display = 'block';
-      document.getElementById('name').style.display = 'block';
       document.getElementById('id').style.display = 'block';
       document.getElementById('phone').style.display = 'block';
       document.getElementById('hours').style.display = 'block';
-      document.getElementById('cycleCode').style.display = 'block';
-      document.getElementById('note').style.display = 'block';
       document.getElementById('note').placeholder = 'Note (optional)';
       document.getElementById('name').focus();
       document.getElementById('errorMessage').innerHTML = '';
@@ -135,12 +132,9 @@
       currentType = 'repair';
       document.getElementById('form_type').value = 'repair';
       document.getElementById('bikeForm').style.display = 'block';
-      document.getElementById('name').style.display = 'block';
       document.getElementById('id').style.display = 'none';
       document.getElementById('phone').style.display = 'none';
       document.getElementById('hours').style.display = 'none';
-      document.getElementById('cycleCode').style.display = 'block';
-      document.getElementById('note').style.display = 'block';
       document.getElementById('note').placeholder = 'Problem';
       document.getElementById('name').focus();
       document.getElementById('errorMessage').innerHTML = '';
