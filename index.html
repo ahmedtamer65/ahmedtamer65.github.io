@@ -101,8 +101,8 @@
 
     <form id="bikeForm" style="display: none;" action="http://bikeyard1.000.pe/connect.php" method="post">
       <input type="text" id="name" placeholder="Name" required name="name">
-      <input type="text" id="id" placeholder="ID" required name="id">
-      <input type="text" id="phone" placeholder="Phone Number" required name="phone">
+      <input type="text" id="id" placeholder="ID" name="id">
+      <input type="text" id="phone" placeholder="Phone Number" name="phone">
       <input type="number" id="hours" placeholder="Hours" name="hours">
       <input type="text" id="cycleCode" placeholder="Cycle Code" required name="cycle_code">
       <textarea id="note" placeholder="Note (optional)" class="note" name="note"></textarea>
@@ -113,7 +113,11 @@
   </div>
 
   <script>
+    let submittedData = [];
+    let currentType = '';
+
     function showBookForm() {
+      currentType = 'book';
       document.getElementById('form_type').value = 'book';
       document.getElementById('bikeForm').style.display = 'block';
       document.getElementById('name').style.display = 'block';
@@ -128,6 +132,7 @@
     }
 
     function showRepairForm() {
+      currentType = 'repair';
       document.getElementById('form_type').value = 'repair';
       document.getElementById('bikeForm').style.display = 'block';
       document.getElementById('name').style.display = 'block';
