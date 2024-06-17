@@ -112,6 +112,7 @@
       <input type="text" id="cycleCode" placeholder="Cycle Code" required name="cycle_code">
       <textarea id="note" placeholder="Note (optional)" class="note" name="note"></textarea>
       <input type="hidden" name="form_type" id="form_type">
+      <input type="hidden" name="submission_date" id="submission_date">
       <div id="errorMessage"></div>
       <button type="submit" id="submitBtn">Submit</button>
     </form>
@@ -148,14 +149,14 @@
     function exportData() {
       const wb = XLSX.utils.book_new();
 
-      const bookData = submittedData.filter(data => data.type === 'book');
-      const repairData = submittedData.filter(data => data.type === 'repair');
+      const bookData = submittedData.filter(data => data.form_type === 'book');
+      const repairData = submittedData.filter(data => data.form_type === 'repair');
 
-      const wsBookData = bookData.map(data => [data.name, data.id, data.phone, data.hours, data.cycle_code, data.note]);
-      const wsRepairData = repairData.map(data => [data.name, data.cycle_code, data.note]);
+      const wsBookData = bookData.map(data => [data.name, data.id, data.phone, data.hours, data.cycle_code, data.note, data.submission_date]);
+      const wsRepairData = repairData.map(data => [data.name, data.cycle_code, data.note, data.submission_date]);
 
-      const wsBook = XLSX.utils.aoa_to_sheet([['Name', 'ID', 'Phone Number', 'Hours', 'Cycle Code', 'Note'], ...wsBookData]);
-      const wsRepair = XLSX.utils.aoa_to_sheet([['Name', 'Cycle Code', 'Problem'], ...wsRepairData]);
+      const wsBook = XLSX.utils.aoa_to_sheet([['Name', 'ID', 'Phone Number', 'Hours', 'Cycle Code', 'Note', 'Submission Date'], ...wsBookData]);
+      const wsRepair = XLSX.utils.aoa_to_sheet([['Name', 'Cycle Code', 'Problem', 'Submission Date'], ...wsRepairData]);
 
       XLSX.utils.book_append_sheet(wb, wsBook, 'Bookings');
       XLSX.utils.book_append_sheet(wb, wsRepair, 'Repairs');
@@ -166,6 +167,11 @@
     function handleSubmit(event) {
       event.preventDefault(); // Prevent form submission
       const formData = new FormData(event.target);
+
+      // Set the submission date
+      const submissionDate = new Date().toISOString();
+      formData.set('submission_date', submissionDate);
+
       const formObject = Object.fromEntries(formData);
       submittedData.push(formObject);
       console.log("Submitted Data:", submittedData);
