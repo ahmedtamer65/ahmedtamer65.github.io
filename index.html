@@ -106,10 +106,10 @@
 
     <form id="bikeForm" style="display: none;" action="http://bikeyard1.000.pe/connect.php" method="post">
       <input type="text" id="name" placeholder="Name" required name="name">
-      <input type="text" id="id" placeholder="ID" name="id">
+      <input type="text" id="id_number" placeholder="ID" name="id_number">
       <input type="text" id="phone" placeholder="Phone Number" name="phone">
       <input type="number" id="hours" placeholder="Hours" name="hours">
-      <input type="text" id="cycleCode" placeholder="Cycle Code" required name="cycle_code">
+      <input type="text" id="cycle_Code" placeholder="Cycle Code" required name="cycle_code">
       <textarea id="note" placeholder="Note (optional)" class="note" name="note"></textarea>
       <input type="hidden" name="form_type" id="form_type">
       <div id="errorMessage"></div>
@@ -151,7 +151,7 @@
       const bookData = submittedData.filter(data => data.type === 'book');
       const repairData = submittedData.filter(data => data.type === 'repair');
 
-      const wsBookData = bookData.map(data => [data.name, data.id, data.phone, data.hours, data.cycle_code, data.note]);
+      const wsBookData = bookData.map(data => [data.name, data.id_number, data.phone, data.hours, data.cycle_code, data.note]);
       const wsRepairData = repairData.map(data => [data.name, data.cycle_code, data.note]);
 
       const wsBook = XLSX.utils.aoa_to_sheet([['Name', 'ID', 'Phone Number', 'Hours', 'Cycle Code', 'Note'], ...wsBookData]);
