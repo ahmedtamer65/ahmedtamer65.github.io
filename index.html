@@ -1,169 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bike Yard App</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f8f8; /* Off-white background */
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.8); /* Slightly transparent white to ensure readability */
-      border-radius: 10px;
-      position: relative; /* Make container relative for absolute positioning */
-    }
-    .background-image {
-      position: absolute;
-      top: 10px; /* Adjusted to start below the header */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 12in; /* Set the width to 12 inches */
-      z-index: -1; /* Place it behind other content */
-      opacity: 0.1; /* Slightly transparent to avoid distraction */
-    }
-    input[type="text"], input[type="number"], textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      box-sizing: border-box;
-    }
-    button {
-      padding: 10px 20px;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-    }
-    #bookBtn {
-      background-color: #007bff;
-    }
-    #repairBtn {
-      background-color: #dc3545;
-    }
-    #submitBtn {
-      background-color: #000;
-    }
-    #exportBtn {
-      background-color: #28a745;
-    }
-    .dashboard {
-      background-color: yellow;
-      padding: 10px;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border: 2px solid red;
-    }
-    .dashboard img {
-      height: 40px;
-    }
-    .note {
-      background-color: #ffc107;
-    }
-    #errorMessage {
-      color: red;
-      font-weight: bold;
-    }
-    .button-container {
-      width: 5in; /* Set width to 5 inches */
-      margin: 20px auto; /* Center the button container */
-      display: flex;
-      justify-content: space-around;
-      gap: 10px; /* Add gap between buttons */
-    }
-  </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-</head>
-<body>
-  <header>
-    <div class="dashboard">
-      <img src="https://img.icons8.com/ios-filled/50/000000/bicycle.png" alt="Bike Logo">
-      <h1>Bike Yard Owner Dashboard</h1>
-    </div>
-  </header>
-  <div class="container">
-    <!-- Background image -->
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLLU40gx6sGv6dKhbyc4AOVtlDFVVetXmpyg&s" alt="Background" class="background-image">
-    
-    <!-- Button container -->
-    <div class="button-container">
-      <button id="bookBtn" onclick="showBookForm()">Book</button>
-      <button id="repairBtn" onclick="showRepairForm()">Repair</button>
-      <button id="exportBtn" onclick="exportData()">Export Data</button>
-    </div>
+<?php
+// Database credentials
+$servername = "sql210.infinityfree.com";
+$username = "if0_36720478";
+$password = "VhjQkrL8A4KR6h1";
+$dbname = "if0_36720478_BIKEYARD";
 
-<form id="bikeForm" style="display: none;" action="https://bikeyard1.000.pe/connect.php" method="post" enctype="multipart/form-data">
-      <input type="text" id="name" placeholder="Name" required name="name">
-      <input type="text" id="id" placeholder="ID" required name="id">
-      <input type="text" id="phone" placeholder="Phone Number" required name="phone">
-      <input type="number" id="hours" placeholder="hours" name="hours">
-      <input type="text" id="cycleCode" placeholder="Cycle Code" required name="cycle_code">
-      <textarea id="note" placeholder="Note" class="note" style="display: none;" name="note"></textarea>
-      <input type="hidden" name="form_type" id="form_type">
-      <div id="errorMessage"></div>
-      <button type="submit" id="submitBtn">Submit</button>
-    </form>
-  </div>
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-  <script>
-    let submittedData = [];
-    let currentType = '';
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-    function showBookForm() {
-      currentType = 'Book';
-      document.getElementById('form_type').value = 'book';
-      document.getElementById('bikeForm').style.display = 'block';
-      document.getElementById('name').style.display = 'block';
-      document.getElementById('id').style.display = 'block';
-      document.getElementById('phone').style.display = 'block';
-      document.getElementById('hours').style.display = 'block';
-      document.getElementById('cycleCode').style.display = 'block';
-      document.getElementById('note').style.display = 'block';
-      document.getElementById('note').placeholder = 'Note (optional)';
-      document.getElementById('name').focus();
-      document.getElementById('errorMessage').innerHTML = '';
+// Process form submission if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Prepare data for insertion
+    $name = $_POST['name'];
+    $id = $_POST['id'];
+    $phone = $_POST['phone'];
+    $hours = isset($_POST['hours']) ? $_POST['hours'] : null;
+    $cycleCode = $_POST['cycle_code'];
+    $note = isset($_POST['note']) ? $_POST['note'] : null;
+    $formType = $_POST['form_type'];
+
+    // Prepare SQL statement based on form type
+    if ($formType === 'book') {
+        $sql = "INSERT INTO bookings (name, id, phone, hours, cycle_code, note) 
+                VALUES ('$name', '$id', '$phone', '$hours', '$cycleCode', '$note')";
+    } elseif ($formType === 'repair') {
+        $sql = "INSERT INTO repairs (name, cycle_code, problem) 
+                VALUES ('$name', '$cycleCode', '$note')";
+    } else {
+        die("Invalid form submission.");
     }
 
-    function showRepairForm() {
-      currentType = 'Repair';
-      document.getElementById('form_type').value = 'repair';
-      document.getElementById('bikeForm').style.display = 'block';
-      document.getElementById('name').style.display = 'block';
-      document.getElementById('id').style.display = 'none';
-      document.getElementById('phone').style.display = 'none';
-      document.getElementById('hours').style.display = 'none';
-      document.getElementById('cycleCode').style.display = 'block';
-      document.getElementById('note').style.display = 'block';
-      document.getElementById('note').placeholder = 'Problem';
-      document.getElementById('name').focus();
-      document.getElementById('errorMessage').innerHTML = '';
+    // Execute SQL statement
+    if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully";
+        // Redirect back to index.html or provide a success message
+        // header("Location: index.html"); // Uncomment to redirect back
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
+} else {
+    echo "Form submission method not allowed.";
+}
 
-    function exportData() {
-      const wb = XLSX.utils.book_new();
-
-      const bookData = submittedData.filter(data => data.type === 'Book');
-      const repairData = submittedData.filter(data => data.type === 'Repair');
-
-      const wsBookData = bookData.map(data => [data.name, data.id, data.phone, data.hours, data.cycleCode, data.note]);
-      const wsRepairData = repairData.map(data => [data.name, data.cycleCode, data.note]);
-
-      const wsBook = XLSX.utils.aoa_to_sheet([['Name', 'ID', 'Phone Number', 'Hours', 'Cycle Code', 'Note'], ...wsBookData]);
-      const wsRepair = XLSX.utils.aoa_to_sheet([['Name', 'Cycle Code', 'Problem'], ...wsRepairData]);
-
-      XLSX.utils.book_append_sheet(wb, wsBook, 'Bookings');
-      XLSX.utils.book_append_sheet(wb, wsRepair, 'Repairs');
-
-      XLSX.writeFile(wb, 'bike_yard_data.xlsx');
-    }
-  </script>
-</body>
-</html>
-
+// Close connection
+$conn->close();
+?>
